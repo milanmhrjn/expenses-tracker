@@ -36,3 +36,31 @@ th, td {
   margin-top: 20px;
   margin-bottom: 20px;
 }
+
+.delete-btn{
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;  
+}
+
+.edit-btn{
+  background-color: #3fbc09;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;  
+  margin-right: 10px;
+
+} 
+
+.btn{
+   display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  height: 100%;
+}

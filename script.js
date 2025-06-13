@@ -1,33 +1,50 @@
-document.getElementById('addExpense').addEventListener('click', function() {
-    //Getting the values user typed in the form
-    var category = document.getElementById('category').value;
-    var description = document.getElementById('description').value;
-    var amount = document.getElementById('amount').value;
-    var date = document.getElementById('date').value;
+document.addEventListener("DOMContentLoaded", function () {
+  // check if we are editing
+  const editExpense = JSON.parse(localStorage.getItem("editExpense"));
 
-    //Getting the name of the user from local storage who is adding the expense 
-    var userName = localStorage.getItem('userName');
+  if (editExpense) {
+    // put the old data into the form
+    document.getElementById("category").value = editExpense.category;
+    document.getElementById("description").value = editExpense.description;
+    document.getElementById("amount").value = editExpense.amount;
+    document.getElementById("date").value = editExpense.date;
+  }
 
-    // making an object with all the info
-    var expense = {
-      user: userName,         
-      category: category,     
-      description: description, 
-      amount: amount,        
-      date: date           
-    };
+  // when addExpense button is clicked
+  document.getElementById("addExpense").addEventListener("click", function () {
+    const category = document.getElementById("category").value;
+    const description = document.getElementById("description").value;
+    const amount = document.getElementById("amount").value;
+    const date = document.getElementById("date").value;
+    const user = localStorage.getItem("userName");
 
-    //  Getting all old expenses, or starting a new list if none
-    const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+    const newExpense = { user, category, description, amount, date };
 
-    // Adding new expense to the list
-    expenses.push(expense);
+    const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
 
-    // Saving the new list back to the browser
-    localStorage.setItem('expenses', JSON.stringify(expenses));
+    if (editExpense) {
+      // we are editing, so find the old one and replace it
+      const index = expenses.findIndex(
+        (e) =>
+          e.user === editExpense.user &&
+          e.category === editExpense.category &&
+          e.description === editExpense.description &&
+          e.amount === editExpense.amount &&
+          e.date === editExpense.date
+      );
 
-    alert("Expense added!");
+      if (index !== -1) {
+        expenses[index] = newExpense;
+      }
 
-    //Redirecting to the user detail page
-    window.location.href = 'userDetail.html';
+      localStorage.removeItem("editExpense"); // remove edit mode
+    } else {
+      // we are adding new
+      expenses.push(newExpense);
+    }
+
+    localStorage.setItem("expenses", JSON.stringify(expenses));
+    alert("Expense saved!");
+    window.location.href = "userExpenses.html";
   });
+});

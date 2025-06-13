@@ -1,37 +1,50 @@
 
-  document.getElementById('addUserForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Stop the page from refreshing
 
-    // Getting the value from the name input box
-    var name = document.getElementById('username').value;
-    var phone = document.getElementById('phoneNumber').value;
-    var age = document.getElementById('age').value;
+// Check if editing a user and pre-fill the form
+const editUser = JSON.parse(localStorage.getItem("editUser"));
+if (editUser) {
+  document.getElementById("username").value = editUser.name;
+  document.getElementById("phoneNumber").value = editUser.phone;
+  document.getElementById("age").value = editUser.age;
+}
 
-    //check if phone number is exactly 10 digits
-    if(phone.length!==10){
-      alert("Phone number must be exactly 10 digits");
-      return;
-    }
+// Form submit logic
+document.getElementById('addUserForm').addEventListener('submit', function(event) {
+  event.preventDefault();
 
-    //check if age is up to 100
-    if (age < 18 || age > 100) {
+  var name = document.getElementById('username').value;
+  var phone = document.getElementById('phoneNumber').value;
+  var age = document.getElementById('age').value;
+
+  if (phone.length !== 10) {
+    alert("Phone number must be exactly 10 digits");
+    return;
+  }
+
+  if (age < 18 || age > 100) {
     alert("Age must be between 18 and 100.");
     return;
   }
 
-  // Get the old users list, or make a new one if it doesn't exist
   var users = JSON.parse(localStorage.getItem('users')) || [];
 
-  // Add the new user to the list
-  users.push({ name: name, phone: phone, age: age });
+  if (editUser) {
+    // Editing existing user
+    const index = users.findIndex(u => 
+      u.name === editUser.name &&
+      u.phone === editUser.phone &&
+      u.age === editUser.age
+    );
+    if (index !== -1) {
+      users[index] = { name, phone, age };
+    }
+    localStorage.removeItem("editUser");
+  } else {
+    // Adding new user
+    users.push({ name, phone, age });
+  }
 
-  // Save the updated users list back to localStorage
   localStorage.setItem('users', JSON.stringify(users));
-
-
-    // Save the name in the browser (localStorage)
-    localStorage.setItem('userName', name);
-
-    // Go to the userDetail page
-    window.location.href = 'userDetail.html';
-  });
+  localStorage.setItem('userName', name);
+  window.location.href = 'userDetail.html';
+});

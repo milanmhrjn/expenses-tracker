@@ -35,6 +35,11 @@ users.forEach(function(user) {
   const updateBtn = document.createElement("button");
   updateBtn.className = "update-btn";
   updateBtn.innerHTML = '<i class="fa-regular fa-pen-to-square"></i>';
+  updateBtn.addEventListener("click", function () {
+  localStorage.setItem("editUser", JSON.stringify(user));
+  window.location.href = "addUser.html";
+});
+
 
   // Delete button
   const deleteBtn = document.createElement("button");
