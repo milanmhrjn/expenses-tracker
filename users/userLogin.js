@@ -5,7 +5,7 @@ document.getElementById("loginForm").addEventListener('submit',function(event) {
   
   if(userName === 'admin' && password === 'admin') {
     alert('Login successful!');
-    window.location.href = 'userDetail.html'; // Redirect to userDetail.html on successful login
+     window.location.href = '../user_details/userDetails.html';
   }
   else{
     alert("Invalid username or password.");
