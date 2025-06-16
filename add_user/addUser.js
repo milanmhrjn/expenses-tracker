@@ -1,64 +1,90 @@
+$(document).ready(() => {
+  const editUser = getEditUser();
+  if (editUser) {
+    prefillForm(editUser);
+  }
 
+  $("#addUserForm").on("submit", handleFormSubmit);
+});
 
-// Check if editing a user and pre-fill the form
-const editUser = JSON.parse(localStorage.getItem("editUser"));
-if (editUser) {
-  document.getElementById("username").value = editUser.name;
-  document.getElementById("phoneNumber").value = editUser.phone;
-  document.getElementById("age").value = editUser.age;
-  document.getElementById("email").value = editUser.email;
-  document.getElementById("gender").value = editUser.gender;
-  document.getElementById("address").value = editUser.address;
+// getting editUser data from localStorage
+function getEditUser() {
+  return JSON.parse(localStorage.getItem("editUser"));
 }
 
-// Form submit logic
-document.getElementById('addUserForm').addEventListener('submit', function(event) {
-  event.preventDefault();
+// prefilling form inputs when editing
+function prefillForm(user) {
+  $("#username").val(user.name);
+  $("#phoneNumber").val(user.phone);
+  $("#age").val(user.age);
+  $("#email").val(user.email);
+  $("#gender").val(user.gender);
+  $("#address").val(user.address);
+}
 
-  var name = document.getElementById('username').value;
-  var phone = document.getElementById('phoneNumber').value;
-  var age = document.getElementById('age').value;
-  var email = document.getElementById('email').value;
-  var gender = document.getElementById('gender').value;
-  var address = document.getElementById('address').value;
-
+// validating phone and age inputs, return true if valid, else false
+function validateInputs(phone, age) {
   if (phone.length !== 10) {
     alert("Phone number must be exactly 10 digits");
-    return;
+    return false;
   }
-
   if (age < 18 || age > 100) {
     alert("Age must be between 18 and 100.");
-    return;
+    return false;
   }
+  return true;
+}
 
-  var users = JSON.parse(localStorage.getItem('users')) || [];
+// getting user input data from form
+function getFormData() {
+  return {
+    name: $("#username").val().trim(),
+    phone: $("#phoneNumber").val().trim(),
+    age: parseInt($("#age").val().trim(), 10),
+    email: $("#email").val().trim(),
+    gender: $("#gender").val(),
+    address: $("#address").val().trim()
+  };
+}
+
+// saving or update user in localStorage
+function saveUser(editUser, newUser) {
+  let users = JSON.parse(localStorage.getItem("users")) || [];
 
   if (editUser) {
-    // Editing existing user
-    const index = users.findIndex(u => 
+    const index = users.findIndex(u =>
       u.name === editUser.name &&
       u.phone === editUser.phone &&
       u.age === editUser.age &&
       u.email === editUser.email &&
       u.gender === editUser.gender &&
-      u.address === editUser.address 
+      u.address === editUser.address
     );
+
     if (index !== -1) {
-      users[index] = { name, phone, age,email,gender,address };
+      users[index] = newUser;
     }
     localStorage.removeItem("editUser");
   } else {
-    // Adding new user
-    users.push({ name, phone, age,email,gender,address});
+    users.push(newUser);
   }
 
-  localStorage.setItem('users', JSON.stringify(users));
-  localStorage.setItem('userName', name);
-  window.location.href = 'userDetail.html';
-});
+  localStorage.setItem("users", JSON.stringify(users));
+  localStorage.setItem("userName", newUser.name);
+}
 
+// form submit handler
+function handleFormSubmit(event) {
+  event.preventDefault();
 
+  const editUser = getEditUser();
+  const formData = getFormData();
 
+  if (!validateInputs(formData.phone, formData.age)) {
+    return;
+  }
 
+  saveUser(editUser, formData);
 
+  window.location.href = "../user_details/userDetail.html";
+}

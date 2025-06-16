@@ -1,50 +1,83 @@
-document.addEventListener("DOMContentLoaded", function () {
-  // check if we are editing
-  const editExpense = JSON.parse(localStorage.getItem("editExpense"));
-
+$(document).ready(function () {
+  const editExpense = getEditExpense();
   if (editExpense) {
-    // put the old data into the form
-    document.getElementById("category").value = editExpense.category;
-    document.getElementById("description").value = editExpense.description;
-    document.getElementById("amount").value = editExpense.amount;
-    document.getElementById("date").value = editExpense.date;
+    prefillForm(editExpense);
   }
 
-  // when addExpense button is clicked
-  document.getElementById("addExpense").addEventListener("click", function () {
-    const category = document.getElementById("category").value;
-    const description = document.getElementById("description").value;
-    const amount = document.getElementById("amount").value;
-    const date = document.getElementById("date").value;
-    const user = localStorage.getItem("userName");
+  $("#addExpense").on("click", function () {
+    const newExpense = getFormData();
+    const expenses = getAllExpenses();
+    const editMode = !!editExpense;
 
-    const newExpense = { user, category, description, amount, date };
-
-    const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-
-    if (editExpense) {
-      // we are editing, so find the old one and replace it
-      const index = expenses.findIndex(
-        (e) =>
-          e.user === editExpense.user &&
-          e.category === editExpense.category &&
-          e.description === editExpense.description &&
-          e.amount === editExpense.amount &&
-          e.date === editExpense.date
-      );
-
-      if (index !== -1) {
-        expenses[index] = newExpense;
-      }
-
-      localStorage.removeItem("editExpense"); // remove edit mode
+    if (editMode) {
+      updateExpense(expenses, editExpense, newExpense);
     } else {
-      // we are adding new
-      expenses.push(newExpense);
+      addNewExpense(expenses, newExpense);
     }
 
-    localStorage.setItem("expenses", JSON.stringify(expenses));
+    saveExpenses(expenses);
+    localStorage.removeItem("editExpense");
     alert("Expense saved!");
-    window.location.href = "userExpenses.html";
+    redirectToUserExpensesPage();
   });
 });
+
+// getting editExpense from localStorage
+function getEditExpense() {
+  return JSON.parse(localStorage.getItem("editExpense"));
+}
+
+// filling form with old data when editing
+function prefillForm(expense) {
+  $("#category").val(expense.category);
+  $("#description").val(expense.description);
+  $("#amount").val(expense.amount);
+  $("#date").val(expense.date);
+}
+
+// getting form input values and return as object
+function getFormData() {
+  const category = $("#category").val();
+  const description = $("#description").val();
+  const amount = $("#amount").val();
+  const date = $("#date").val();
+  const user = localStorage.getItem("userName");
+
+  return { user, category, description, amount, date };
+}
+
+//getting all expenses from localStorage
+function getAllExpenses() {
+  return JSON.parse(localStorage.getItem("expenses")) || [];
+}
+
+// adding  new expense to the array
+function addNewExpense(expenses, expense) {
+  expenses.push(expense);
+}
+
+// replacing old expense with updated one
+function updateExpense(expenses, oldExp, newExp) {
+  const index = expenses.findIndex(
+    (e) =>
+      e.user === oldExp.user &&
+      e.category === oldExp.category &&
+      e.description === oldExp.description &&
+      e.amount === oldExp.amount &&
+      e.date === oldExp.date
+  );
+
+  if (index !== -1) {
+    expenses[index] = newExp;
+  }
+}
+
+// saving expenses array back to localStorage
+function saveExpenses(expenses) {
+  localStorage.setItem("expenses", JSON.stringify(expenses));
+}
+
+// redirecting to user expenses page
+function redirectToUserExpensesPage() {
+  window.location.href = "../user_details/userDetail.html";
+}

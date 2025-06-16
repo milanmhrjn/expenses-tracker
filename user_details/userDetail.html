@@ -4,8 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User Details</title>
-    <link rel="stylesheet" href="user_details/userDetail.css" />
+    <link rel="stylesheet" href="userDetail.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
   <body>
     <div class="container">
@@ -13,9 +14,13 @@
       <ul id="list" class="list">
       
       </ul>
-      <a href="addUser.html"><button class="addUser"  onclick="localStorage.removeItem('editUser'); window.location.href='addUser.html';">Add User</button></a>
+      <a href="../add_user/addUser.html">
+      <button class="addUser" onclick="localStorage.removeItem('editUser');">
+    Add User
+  </button>
+</a>
 
     </div>
-    <script src="user_details/userDetail.js"></script>
+    <script src="userDetail.js"></script>
   </body>
 </html>

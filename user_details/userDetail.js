@@ -1,73 +1,68 @@
-const users = JSON.parse(localStorage.getItem('users')) || [];
-const list = document.getElementById("list");
+$(document).ready(function () {
+  const users = JSON.parse(localStorage.getItem("users")) || [];
+  const $list = $("#list");
 
-users.forEach(function(user) {
-  // Creating list item from li tag
-  const li = document.createElement("li");
-  list.appendChild(li);
+  users.forEach(function (user) {
+    const $li = $("<li></li>");
+    const $name = $("<span></span>").text(user.name);
+    const $buttons = $("<div></div>").addClass("buttons");
 
-  // User name on left
-  const name = document.createElement("span");
-  name.innerText = user.name;
+    // calling the functions to get buttons
+    const $addBtn = createAddButton();
+    const $viewBtn = createViewButton(user);
+    const $updateBtn = createUpdateButton(user);
+    const $deleteBtn = createDeleteButton(user, $li);
 
-  // Buttons container on right
-  const buttons = document.createElement("div");
-  buttons.className = "buttons";
-
-  // Add Expenses button
-  const addExpensesBtn = document.createElement("button");
-  addExpensesBtn.className = "add-btn";
-  addExpensesBtn.innerHTML = '<i class="fa-solid fa-plus"></i>';
-  addExpensesBtn.addEventListener("click",function() {
-    window.location.href = "index.html";
+    // appending
+    $buttons.append($addBtn, $viewBtn, $updateBtn, $deleteBtn);
+    $li.append($name, $buttons);
+    $list.append($li);
   });
 
-  // View button
-  const viewBtn = document.createElement("button");
-  viewBtn.className = "view-btn";
-  viewBtn.innerHTML = '<i class="fa-regular fa-eye"></i>';
-  viewBtn.addEventListener("click", function() {
-  localStorage.setItem('userName', user.name); // Save the selected user's name
-  window.location.href = "userExpenses.html";
-});
 
-  // Update button
-  const updateBtn = document.createElement("button");
-  updateBtn.className = "update-btn";
-  updateBtn.innerHTML = '<i class="fa-regular fa-pen-to-square"></i>';
-  updateBtn.addEventListener("click", function () {
-  localStorage.setItem("editUser", JSON.stringify(user));
-  window.location.href = "addUser.html";
-});
+  function createAddButton() {
+    const $btn = $("<button></button>")
+      .addClass("add-btn")
+      .html('<i class="fa-solid fa-plus"></i>')
+      .on("click", function () {
+        localStorage.removeItem("editExpense");
+        window.location.href = "../expensesTracker/index.html";
+      });
+    return $btn;
+  }
 
+  function createViewButton(user) {
+    const $btn = $("<button></button>")
+      .addClass("view-btn")
+      .html('<i class="fa-regular fa-eye"></i>')
+      .on("click", function () {
+        localStorage.setItem("userName", user.name);
+        window.location.href = "../user_expenses/userExpenses.html";
+      });
+    return $btn;
+  }
 
-  // Delete button
-  const deleteBtn = document.createElement("button");
-  deleteBtn.className = "delete-btn";
-  deleteBtn.innerHTML='<i class="fa-solid fa-trash"></i>';
+  function createUpdateButton(user) {
+    const $btn = $("<button></button>")
+      .addClass("update-btn")
+      .html('<i class="fa-regular fa-pen-to-square"></i>')
+      .on("click", function () {
+        localStorage.setItem("editUser", JSON.stringify(user));
+        window.location.href = "../add_user/addUser.html";
+      });
+    return $btn;
+  }
 
-  // Adding event listener to delete user
-  deleteBtn.addEventListener("click", function() {
-  // Finding all users
-  let findUser = JSON.parse(localStorage.getItem('users')) || [];
-  // Removing the user with the matching name
-  deleteUser = findUser.filter(u => u.name !== user.name);
-  // Saving the updated list back to localStorage
-  localStorage.setItem('users', JSON.stringify(deleteUser));
-  // Removing the user from the page
-  li.remove();
-});
-
-  // Adding  buttons to container
-  buttons.appendChild(addExpensesBtn);
-  buttons.appendChild(viewBtn);
-  buttons.appendChild(updateBtn);
-  buttons.appendChild(deleteBtn);
-
-  // Adding name and buttons to li
-  li.appendChild(name);
-  li.appendChild(buttons);
-
-  // Adding li to list
-  list.appendChild(li);
+  function createDeleteButton(user, $li) {
+    const $btn = $("<button></button>")
+      .addClass("delete-btn")
+      .html('<i class="fa-solid fa-trash"></i>')
+      .on("click", function () {
+        let findUser = JSON.parse(localStorage.getItem("users")) || [];
+        const updatedUsers = findUser.filter((u) => u.name !== user.name);
+        localStorage.setItem("users", JSON.stringify(updatedUsers));
+        $li.remove();
+      });
+    return $btn;
+  }
 });
