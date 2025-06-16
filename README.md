@@ -9,3 +9,6 @@
 - added functionality to the delete button user can delete their expenses
 - added date validation where user can see their statement of 1 day, 7 days and 30 days
   
+16th june 2025
+-  worked on folder structure, scripting and jquery
+  
