@@ -1,27 +1,35 @@
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Login</title>
-  <link rel="stylesheet" href="userLogin.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>;
-  
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Login</title>
+    <link rel="stylesheet" href="/assets/css/userLogin.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+
+  <body>
     <div class="container">
-        <h2 class="userLogin">Admin Login</h2>
-        <form id="loginForm">
-            <div class="form-control">
-                <label for="username">Username</label>
-                <input type="text" id="username" placeholder="Enter your username" required>
-            </div>
-            <div class="form-control">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter your password" required>
-            </div>
-            <button type="submit" class="btn">Login</button>
-        </form>
+      <h2 class="userLogin">Admin Login</h2>
+      <form id="loginForm">
+        <div class="form-control">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            placeholder="Enter your username"
+            required />
+        </div>
+        <div class="form-control">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter your password"
+            required />
+        </div>
+        <button type="submit" class="btn">Login</button>
+      </form>
     </div>
-    <script src="userLogin.js"></script>
-</body>
+    <script src="userLogin.js" type="module"></script>
+  </body>
 </html>
