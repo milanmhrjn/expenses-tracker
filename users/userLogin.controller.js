@@ -3,10 +3,10 @@ export function userLoginHandle(event) {
 
   const userName = $("#username").val().trim();
   const password = $("#password").val().trim();
-
+  debugger
   if (userName === "admin" && password === "admin") {
     alert("Login successful!");
-    window.location.href = "../user_details/userDetail.html";
+    window.location.href ="../user_details/userDetail.html"
   } else {
     alert("Invalid username or password.");
   }

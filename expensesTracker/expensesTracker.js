@@ -1,5 +1,6 @@
-import{getEditExpense, getFormData, getAllExpenses} from "./expensesTracker.model"
-import {prefillForm,addNewExpense, updateExpense, saveExpenses,redirectToUserExpensesPage} from "./expensesTracker.controller.js";
+import{getEditExpense,getFormData,getAllExpenses,addNewExpense,updateExpense,saveExpenses} from "./expensesTracker.model.js"
+import{prefillForm} from "./expensesTracker.view.js"
+import {redirectToUserExpensesPage} from "./expensesTracker.controller.js"
 
 $(document).ready(function () {
   const editExpense = getEditExpense();

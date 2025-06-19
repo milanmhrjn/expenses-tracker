@@ -1,34 +1,16 @@
-// setting heading with user name
-export function setHeading(userName) {
-  $("#userExpensesHeading").text(`${userName}'s Expenses`);
-}
+import { clearTable, renderExpenses } from "./userExpenses.view.js";
+// filtering expenses by date and rendering
+export function filterByDays(days, userName, expenses) {
+  clearTable();
+  const today = new Date();
+  const pastDate = new Date();
+  pastDate.setDate(today.getDate() - days);
 
-
-
-// delete functionality
-export function addDeleteButtonFunctionality($row, exp, allExpenses) {
-  $row.find(".delete-btn").on("click", function () {
-    const index = allExpenses.findIndex(
-      (e) =>
-        e.user === exp.user &&
-        e.category === exp.category &&
-        e.description === exp.description &&
-        e.amount === exp.amount &&
-        e.date === exp.date
-    );
-
-    if (index !== -1) {
-      allExpenses.splice(index, 1);
-      localStorage.setItem("expenses", JSON.stringify(allExpenses));
-      $row.remove();
-    }
+  const filteredExpenses = expenses.filter((exp) => {
+    if (exp.user !== userName) return false;
+    const expenseDate = new Date(exp.date);
+    return expenseDate >= pastDate && expenseDate <= today;
   });
-}
-
-// edit functionality
-export function addEditButtonFunctionality($row, exp) {
-  $row.find(".edit-btn").on("click", function () {
-    localStorage.setItem("editExpense", JSON.stringify(exp));
-    window.location.href = "../expensesTracker/index.html";
-  });
+  console.log("Filtered expenses:", filteredExpenses);
+  renderExpenses(filteredExpenses, expenses);
 }

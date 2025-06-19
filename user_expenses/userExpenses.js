@@ -1,5 +1,6 @@
-import{getUserName, getExpenses, filterByDays,renderExpenses,clearTable } from "userExpenses.model"
-import{setHeading, addDeleteButtonFunctionality, addEditButtonFunctionality} from "userExpenses.controller"
+import { getUserName, getExpenses } from "./userExpenses.model.js";
+import { setHeading } from "./userExpenses.view.js";
+import { filterByDays } from "./userExpenses.controller.js";
 $(document).ready(function () {
   const userName = getUserName();
   const expenses = getExpenses();
@@ -13,5 +14,3 @@ $(document).ready(function () {
     filterByDays(days, userName, expenses);
   });
 });
-
-

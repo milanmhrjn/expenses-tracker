@@ -1,45 +1,35 @@
-export function createAddButton() {
-  const $btn = $("<button></button>")
-    .addClass("add-btn")
-    .html('<i class="fa-solid fa-plus"></i>')
-    .on("click", function () {
-      localStorage.removeItem("editExpense");
-      window.location.href = "../expensesTracker/index.html";
-    });
-  return $btn;
-}
+import { Model } from "./userDetail.model.js";
+import { View } from "./userDetail.view.js";
 
-export function createViewButton(user) {
-  const $btn = $("<button></button>")
-    .addClass("view-btn")
-    .html('<i class="fa-regular fa-eye"></i>')
-    .on("click", function () {
-      localStorage.setItem("userName", user.name);
-      window.location.href = "../user_expenses/userExpenses.html";
-    });
-  return $btn;
-}
+// controller object that controls everything
+export const Controller = {
+  //this function starts everything when page is load
+  init() {
+    const users = Model.getUsers();        // getting all users from localStorage using the Model
+    View.renderUsers(users, this);         // telling the View to show all users and give it access to controller functions
+  },
 
-export function createUpdateButton(user) {
-  const $btn = $("<button></button>")
-    .addClass("update-btn")
-    .html('<i class="fa-regular fa-pen-to-square"></i>')
-    .on("click", function () {
-      localStorage.setItem("editUser", JSON.stringify(user));
-      window.location.href = "../add_user/addUser.html";
-    });
-  return $btn;
-}
+  // handling add button when it is clicked
+  handleAdd() {
+    localStorage.removeItem("editExpense"); // clearing old editExpense data
+    window.location.href = "../expensesTracker/expensesTracker.html"; // redirecting to the expense adding page
+  },
 
-export function createDeleteButton(user, $li) {
-  const $btn = $("<button></button>")
-    .addClass("delete-btn")
-    .html('<i class="fa-solid fa-trash"></i>')
-    .on("click", function () {
-      let findUser = JSON.parse(localStorage.getItem("users")) || [];
-      const updatedUsers = findUser.filter((u) => u.name !== user.name);
-      localStorage.setItem("users", JSON.stringify(updatedUsers));
-      $li.remove();
-    });
-  return $btn;
-}
+  // handling view button when it is clicked
+  handleView(user) {
+    localStorage.setItem("userName", user.name); // saving the user's name to localStorage
+    window.location.href = "../user_expenses/userExpenses.html"; // redirecting to the user's expenses page
+  },
+
+  // handling update button when it is clicked
+  handleUpdate(user) {
+    localStorage.setItem("editUser", JSON.stringify(user)); // saving the user object in localStorage
+    window.location.href = "../add_user/addUser.html"; // redirecting to the add user form
+  },
+
+  // handling delete button when it is clicked
+  handleDelete(user, $li) {
+    Model.deleteUser(user.name); // using the Model to delete this user from localStorage
+    $li.remove();                // removing the user from the page
+  }
+};

@@ -1,4 +1,4 @@
-import {userLoginHandle} from './userLogin.controller'
+import {userLoginHandle} from "../users/userLogin.controller.js"
 $(document).ready(function () {
   $("#loginForm").on("submit", userLoginHandle);
 });
