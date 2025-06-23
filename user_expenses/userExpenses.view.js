@@ -39,17 +39,9 @@ export function clearTable() {
 // delete functionality
 export function addDeleteButtonFunctionality($row, exp, allExpenses) {
   $row.find(".delete-btn").on("click", function () {
-    const index = allExpenses.findIndex(
-      (e) =>
-        e.user === exp.user &&
-        e.category === exp.category &&
-        e.description === exp.description &&
-        e.amount === exp.amount &&
-        e.date === exp.date
-    );
-
+  const index = allExpenses.findIndex(e => e.id === exp.id);
     if (index !== -1) {
-      allExpenses.splice(index, 1);
+      allExpenses.splice(index, 1); 
       localStorage.setItem("expenses", JSON.stringify(allExpenses));
       $row.remove();
     }

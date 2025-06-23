@@ -1,4 +1,5 @@
-import { clearTable, renderExpenses } from "./userExpenses.view.js";
+import { clearTable, renderExpenses, setHeading} from "./userExpenses.view.js";
+import {getUserName, getExpenses} from "./userExpenses.model.js"
 // filtering expenses by date and rendering
 export function filterByDays(days, userName, expenses) {
   clearTable();
@@ -13,4 +14,19 @@ export function filterByDays(days, userName, expenses) {
   });
   console.log("Filtered expenses:", filteredExpenses);
   renderExpenses(filteredExpenses, expenses);
+}
+
+
+export function userExpenses(){
+    const userName = getUserName();
+  const expenses = getExpenses();
+  setHeading(userName);
+
+  const defaultDays = parseInt($("#statementSelect").val());
+  filterByDays(defaultDays, userName, expenses);
+
+  $("#statementSelect").on("change", function () {
+    const days = parseInt($(this).val());
+    filterByDays(days, userName, expenses);
+  });
 }

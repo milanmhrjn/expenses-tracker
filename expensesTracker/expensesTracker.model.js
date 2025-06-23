@@ -10,8 +10,18 @@ export function getFormData() {
   const amount = $("#amount").val();
   const date = $("#date").val();
   const user = localStorage.getItem("userName");
+  const editExpense = getEditExpense()
 
-  return { user, category, description, amount, date };
+  const formData = {
+    category: category,
+    description: description,
+    amount: amount,
+    date: date,
+    user: user,
+    id: editExpense?.id || crypto.randomUUID(),
+  };
+
+  return formData;
 }
 
 //getting all expenses from localStorage
@@ -26,15 +36,7 @@ export function addNewExpense(expenses, expense) {
 
 // replacing old expense with updated one
 export function updateExpense(expenses, oldExp, newExp) {
-  const index = expenses.findIndex(
-    (e) =>
-      e.user === oldExp.user &&
-      e.category === oldExp.category &&
-      e.description === oldExp.description &&
-      e.amount === oldExp.amount &&
-      e.date === oldExp.date
-  );
-
+  const index = expenses.findIndex((e) => e.id === oldExp.id);
   if (index !== -1) {
     expenses[index] = newExp;
   }
