@@ -1,0 +1,57 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  font-family: Arial, sans-serif;
+  background-color: #C69C6D;
+  color: #333;
+   overflow: hidden;
+  height: 100%;
+}
+
+
+.container{
+  width: 500px;
+  margin: 110px auto;
+  padding: 50px;
+  background-color: #3A3A3A;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  color: white;
+}
+
+.input-section{
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-top: 20px;
+  padding:20px;
+  display: grid;
+  background-color: white;
+  color: black;
+  border-radius: 10px;
+}
+
+label{
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+#category,#amount,#date, #description{
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#addExpense{
+  width: 100%;
+  padding: 10px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
