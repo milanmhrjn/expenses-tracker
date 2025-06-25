@@ -1,25 +1,36 @@
 export const Model = {
-  //getting all the list of users from storage
-  getUsers() {
-    return JSON.parse(localStorage.getItem("users")) || []; //will look in local storage for users, if nothing is found it will return empty list
-  },
-//  async getUsers() {
-//     const res = await fetch('http://localhost:5000/userDetails');
-//     return await res.json();
-//   },
-  //will save a list of users to storage
-  saveUsers(users) {
-    // will turn the list of users into a string and save it with the name "users"
-    localStorage.setItem("users", JSON.stringify(users));
+   async getUsers() {
+    const res = await fetch('http://localhost:5000/userDetails');
+    if (!res.ok) throw new Error('Failed to fetch users');
+    return await res.json();
   },
 
-  // will delete  a user by their name
-  deleteUser(userName) {
-    // will get all users from storage first
-    const users = this.getUsers();
-    // will make a new list without the user who has the given name
-    const filteredUsers = users.filter(u => u.name !== userName);
-    // will save the new list back into storage
-    this.saveUsers(filteredUsers);
+  async addUser(user) {
+    const res = await fetch('http://localhost:5000/userDetails', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(user)
+    });
+    if (!res.ok) throw new Error('Failed to add user');
+    return await res.text();
+  },
+
+   async deleteUser(id) {
+    const res = await fetch(`http://localhost:5000/userDetails/${id}`, {
+      method: 'DELETE'
+    });
+    if (!res.ok) throw new Error('Failed to delete user');
+    return await res.text();
+  },
+
+  
+  async updateUser(userId, updatedUser) {
+    const res = await fetch(`http://localhost:5000/userDetails/${userId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedUser)
+    });
+    if (!res.ok) throw new Error('Failed to update user');
+    return await res.text();
   }
 };

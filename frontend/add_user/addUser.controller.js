@@ -1,28 +1,39 @@
 import * as Model from "./addUser.model.js";
 import * as View from "./addUser.view.js";
 
-//controller object that controls everything
 export const Controller = {
-  //starts the whole thing when page loads
-  init() {
-    const editUser = Model.getEditUser(); // checks if there is a user saved to edit from local storage
-    if (editUser) { 
-      View.prefillForm(editUser);
+  async init() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get("id");
+
+    if (userId) {
+      try {
+        const editUser = await Model.fetchUserById(userId);
+        this.editUser = editUser;
+        View.prefillForm(editUser);
+      } catch (err) {
+        console.error("Failed to fetch user for editing:", err);
+      }
     }
+
     $("#addUserForm").on("submit", this.handleFormSubmit.bind(this));
   },
 
-  handleFormSubmit(event) {
+  async handleFormSubmit(event) {
     event.preventDefault();
-
     const formData = Model.getFormData();
     if (!View.validateInputs(formData.phone, formData.age)) {
       return;
     }
-
-    const editUser = Model.getEditUser();
-    Model.saveUser(editUser, formData);
-
-    window.location.href = "../user_details/userDetail.html";
+    try {
+      await Model.saveUser(this.editUser, formData);
+      window.location.href = "../user_details/userDetail.html"
+    } catch (err) {
+      console.error("Failed to save user:", err);
+      alert("Error saving user.");
+    }
   },
+
+
+
 };

@@ -1,11 +1,5 @@
-// getting editUser data from localStorage
-export function getEditUser() {
-  return JSON.parse(localStorage.getItem("editUser"));
-}
-
-
 export function getFormData() {
-  const formData = {
+  return {
     name: $("#username").val().trim(),
     phone: $("#phoneNumber").val().trim(),
     age: parseInt($("#age").val().trim()),
@@ -13,29 +7,28 @@ export function getFormData() {
     gender: $("#gender").val(),
     address: $("#address").val().trim()
   };
-  //retrieving user object from local storage
-  const editUser = getEditUser();
-  //storing new id in formData, after that it checks if form has prefilled data and has an id if not it creates and random special id
-  formData.id = editUser?.id || crypto.randomUUID();
-
-  return formData;
 }
 
-// saving or update user in localStorage
-export function saveUser(editUser, newUser) {
-  let users = JSON.parse(localStorage.getItem("users")) || [];
+export async function saveUser(editUser, newUser) {
+  const url = editUser
+    ? `http://localhost:5000/userDetails/${editUser.id}`
+    : "http://localhost:5000/userDetails";
 
-  if (editUser) {
+  const method = editUser ? "PUT" : "POST";
 
-    const index = users.findIndex(u => u.id === editUser.id); 
-    if (index !== -1) {
-      users[index] = newUser;
-    }
-    localStorage.removeItem("editUser");
-  } else {
-    users.push(newUser);
+  const res = await fetch(url, {
+    method,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(newUser)
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to save user");
   }
+}
 
-  localStorage.setItem("users", JSON.stringify(users));
-  localStorage.setItem("userName", newUser.name);
+export async function fetchUserById(id) {
+  const res = await fetch(`http://localhost:5000/userDetails/${id}`);
+  if (!res.ok) throw new Error("User fetch failed");
+  return await res.json();
 }

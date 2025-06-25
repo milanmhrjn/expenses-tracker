@@ -1,4 +1,4 @@
-// prefilling form inputs when editing
+
 export function prefillForm(user) {
   $("#username").val(user.name);
   $("#phoneNumber").val(user.phone);
@@ -8,7 +8,7 @@ export function prefillForm(user) {
   $("#address").val(user.address);
 }
 
-// validating phone and age inputs, return true if valid, else false
+
 export function validateInputs(phone, age) {
    if(phone<0){
     alert("Phone number must be positive number")
