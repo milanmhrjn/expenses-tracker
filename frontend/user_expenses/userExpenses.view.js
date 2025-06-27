@@ -1,7 +1,10 @@
-// setting heading with user name
-export function setHeading(userName) {
-  $("#userExpensesHeading").text(`${userName}'s Expenses`);
+import { deleteExpenseById } from "../expensesTracker/expensesTracker.model.js";
+
+
+export function setHeading(text) {
+  $("#userExpensesHeading").text(text);
 }
+
 
 // rendering filtered expenses into table
 export function renderExpenses(filteredExpenses, allExpenses) {
@@ -11,10 +14,10 @@ export function renderExpenses(filteredExpenses, allExpenses) {
     const $tr = $(`
         <tr>
           <td>${idx + 1}</td>
-          <td>${exp.category}</td>
-          <td class="desc-col">${exp.description}</td>
-          <td>${exp.amount}</td>
-          <td>${exp.date}</td>
+          <td>${exp.Category}</td>
+          <td>${exp.Description}</td>
+          <td>${exp.Amount}</td>
+          <td>${new Date(exp.Date).toLocaleString()}</td>
           <td>
             <div class="btn">
               <button class="edit-btn"><i class="fa-regular fa-pen-to-square"></i></button>
@@ -36,22 +39,27 @@ export function clearTable() {
   $("#expenseTableBody").empty();
 }
 
-// delete functionality
-export function addDeleteButtonFunctionality($row, exp, allExpenses) {
-  $row.find(".delete-btn").on("click", function () {
-  const index = allExpenses.findIndex(e => e.id === exp.id);
-    if (index !== -1) {
-      allExpenses.splice(index, 1); 
-      localStorage.setItem("expenses", JSON.stringify(allExpenses));
-      $row.remove();
+export function addDeleteButtonFunctionality($row, exp) {
+  $row.find(".delete-btn").on("click", async function () {
+    if (!confirm("Are you sure you want to delete this expense?")) return;
+
+    try {
+      const expenseId = exp.id || exp.Id;
+      console.log("Deleting from backend:", expenseId);
+
+      await deleteExpenseById(expenseId); 
+      $row.remove(); 
+    } catch (err) {
+      console.error("Delete failed:", err);
+      alert("Failed to delete expense.");
     }
   });
 }
 
-// edit functionality
 export function addEditButtonFunctionality($row, exp) {
   $row.find(".edit-btn").on("click", function () {
     localStorage.setItem("editExpense", JSON.stringify(exp));
-    window.location.href = "/expensesTracker/expensesTracker.html";
+    window.location.href = "../expensesTracker/expensesTracker.html";
   });
 }
+

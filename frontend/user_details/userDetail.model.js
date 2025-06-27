@@ -1,9 +1,11 @@
 export const Model = {
    async getUsers() {
-    const res = await fetch('http://localhost:5000/userDetails');
+    const res = await fetch('http://localhost:5000/userDetails'); 
     if (!res.ok) throw new Error('Failed to fetch users');
     return await res.json();
   },
+
+
 
   async addUser(user) {
     const res = await fetch('http://localhost:5000/userDetails', {
@@ -32,5 +34,13 @@ export const Model = {
     });
     if (!res.ok) throw new Error('Failed to update user');
     return await res.text();
-  }
+  },
+
+  async getExpenses(userId) {
+  const res = await fetch(`http://localhost:5000/expensesTracker/${userId}`);
+  if (!res.ok) throw new Error("Failed to fetch expenses");
+  return await res.json();
+}
 };
+
+

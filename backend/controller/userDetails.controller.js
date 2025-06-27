@@ -54,13 +54,13 @@ exports.updateUser = async (req, res) => {
 }
 
 
-
-exports.deleteUser= async (req, res) => {
+exports.deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
-    await db.query(`DELETE FROM Users WHERE id = @id`, { id });
+    await db.query('DELETE FROM Users WHERE id = @id', { id });
     res.send('User deleted successfully.');
   } catch (err) {
     res.status(500).send(err.message);
   }
-}
+};
+

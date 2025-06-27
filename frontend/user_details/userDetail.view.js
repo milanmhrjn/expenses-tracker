@@ -14,7 +14,7 @@ export const View = {
       const $li = $("<li></li>");              
       const $name = $("<span></span>").text(user.name);  
       const $buttons = $("<div></div>").addClass("buttons"); 
-      const $addBtn = this.createButton("add-btn", "fa-solid fa-plus", controller.handleAdd);
+      const $addBtn = this.createButton("add-btn", "fa-solid fa-plus",   () => controller.handleAdd(user) );
       const $viewBtn = this.createButton("view-btn", "fa-regular fa-eye", () => controller.handleView(user));
       const $updateBtn = this.createButton("update-btn", "fa-regular fa-pen-to-square", () => controller.handleUpdate(user));
       const $deleteBtn = this.createButton("delete-btn", "fa-solid fa-trash", () => controller.handleDelete(user, $li));
@@ -24,3 +24,6 @@ export const View = {
     });
   }
 };
+export function clearTable() { /* clears #expensesTable tbody */ }
+export function renderExpenses(expenses) { /* loops and appends rows */ }
+export function setHeading(text) { $("#userHeading").text(text); }

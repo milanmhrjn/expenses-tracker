@@ -1,12 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const expensesTracker = require('../controller/expenseTracker.controller');
+const expensesTrackerController = require('../controller/expenseTracker.controller');
 
-router.get('/expensesTracker', expensesTracker.getAllExpenses);
-router.post('/expensesTracker', expensesTracker.createExpense);
-router.put('/expensesTracker/:id', expensesTracker.updateExpense);
-router.delete('/expensesTracker/:id', expensesTracker.deleteExpense);
-
-
+router.post('/expensesTracker/user/:userId', expensesTrackerController.createExpense);
+router.get('/expensesTracker/user/:userId', expensesTrackerController.getExpensesByUserId);
+router.delete('/expensesTracker/:id', expensesTrackerController.deleteExpenseById);
+router.get('/expensesTracker', expensesTrackerController.getAllExpenses);
+router.get('/expensesTracker/:id', expensesTrackerController.getExpenseById);
+router.put("/expensesTracker/:id", expensesTrackerController.updateExpenseById);
 
 module.exports = router;
+
+
+
+

@@ -13,7 +13,7 @@ const config = {
 };
 
 const pool = new sql.ConnectionPool(config);
-const poolConnect = pool.connect(); // Ensures single connection reuse
+const poolConnect = pool.connect(); 
 
 async function query(queryText, params = {}) {
   await poolConnect;
@@ -22,7 +22,6 @@ async function query(queryText, params = {}) {
   for (const key in params) {
     const value = params[key];
 
-    // More precise typing logic
     if (typeof value === "number") {
       if (Number.isInteger(value)) {
         request.input(key, sql.BigInt, value);
@@ -31,7 +30,11 @@ async function query(queryText, params = {}) {
       }
     } else if (typeof value === "boolean") {
       request.input(key, sql.Bit, value);
-    } else {
+    } 
+    else if (value instanceof Date) {
+    request.input(key, sql.DateTime, value);
+    }
+    else {
       request.input(key, sql.NVarChar, value);
     }
   }
