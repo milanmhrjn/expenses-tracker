@@ -26,23 +26,28 @@ const deleteExpenseById = async (req, res) => {
 
 const createExpense = async (req, res) => {
   const { userId } = req.params; 
-  const { amount, category, description, date } = req.body;
+  const { amount, category, description, expenseDate, miscellaneous } = req.body; 
 
-  let parsedDate = new Date(date);
-  if (!date || isNaN(parsedDate.getTime())) {
-    return res.status(400).send("Invalid or missing date.");
+  let parsedDate = new Date(expenseDate);  
+  if (!expenseDate || isNaN(parsedDate.getTime())) {   
+    return res.status(400).send("Invalid or missing expenseDate.");
   }
-
+    const expenseDateValue = parsedDate.toISOString();
+    const miscValue = (category.toLowerCase() === "others" && miscellaneous && miscellaneous.trim() !== "")
+    ? miscellaneous.trim()
+    : null;
+    
   try {
     await db.query(
-      `INSERT INTO expensesTracker (UserId, Amount, Category, Description, Date)
-       VALUES (@UserId, @Amount, @Category, @Description, @Date)`,
+      `INSERT INTO expensesTracker (UserId, Amount, Category, Description, ExpenseDate, Miscellaneous)
+       VALUES (@UserId, @Amount, @Category, @Description, @ExpenseDate, @Miscellaneous)`,  
       {
         UserId: parseInt(userId),         
         Amount: amount,                   
         Category: category,               
         Description: description,          
-        Date: parsedDate                 
+        ExpenseDate: expenseDateValue  ,
+        Miscellaneous: miscValue            
       }
     );
     res.status(201).json({ message: "Expense added successfully." });
@@ -53,23 +58,20 @@ const createExpense = async (req, res) => {
 };
 
 
+
 const updateExpenseById = async (req, res) => {
   const { id } = req.params;
-  const { userId, amount, category, description, date } = req.body;
+  const { userId, UserId, amount, category, description,miscellaneous } = req.body;
 
-  const parsedDate = new Date(date);
-  if (!date || isNaN(parsedDate.getTime())) {
-    return res.status(400).send("Invalid or missing date.");
+  const finalUserId = parseInt(userId || UserId);
+  const dateModified = new Date(); 
+
+  if (!finalUserId || isNaN(finalUserId)) {
+    return res.status(400).send("Invalid or missing userId.");
   }
-
-  console.log(" Updating expense:", {
-    Id: id,
-    UserId: userId,
-    Amount: amount,
-    Category: category,
-    Description: description,
-    Date: parsedDate
-  });
+   const miscValue = (category && category.trim().toLowerCase() === "others" && miscellaneous)
+    ? miscellaneous.trim()
+    : null;
 
   try {
     const result = await db.query(
@@ -78,15 +80,17 @@ const updateExpenseById = async (req, res) => {
            Amount = @Amount,
            Category = @Category,
            Description = @Description,
-           Date = @Date
+           DateModified = @DateModified, 
+           Miscellaneous = @Miscellaneous
        WHERE Id = @Id`,
       {
         Id: parseInt(id),
-        UserId: parseInt(userId),
+        UserId: finalUserId,
         Amount: parseFloat(amount),
         Category: category,
         Description: description,
-        Date: parsedDate
+        DateModified: dateModified,
+        Miscellaneous: miscValue
       }
     );
 
@@ -96,10 +100,13 @@ const updateExpenseById = async (req, res) => {
 
     res.send("Expense updated successfully.");
   } catch (err) {
-    console.error("DB Error:", err);
     res.status(500).send(err.message);
   }
 };
+
+   
+
+
 
 
 const getAllExpenses = async (req, res) => {

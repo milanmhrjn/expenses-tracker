@@ -6,8 +6,9 @@ router.post('/expensesTracker/user/:userId', expensesTrackerController.createExp
 router.get('/expensesTracker/user/:userId', expensesTrackerController.getExpensesByUserId);
 router.delete('/expensesTracker/:id', expensesTrackerController.deleteExpenseById);
 router.get('/expensesTracker', expensesTrackerController.getAllExpenses);
-router.get('/expensesTracker/:id', expensesTrackerController.getExpenseById);
+router.get('/expensesTracker/:id', expensesTrackerController.getExpenseById); 
 router.put("/expensesTracker/:id", expensesTrackerController.updateExpenseById);
+
 
 module.exports = router;
 

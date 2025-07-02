@@ -36,8 +36,8 @@ export const Model = {
     return await res.text();
   },
 
-  async getExpenses(userId) {
-  const res = await fetch(`http://localhost:5000/expensesTracker/${userId}`);
+  async getAllExpensesByUserId(userId) {
+  const res = await fetch(`http://localhost:5000/expensesTracker/user/${userId}`);
   if (!res.ok) throw new Error("Failed to fetch expenses");
   return await res.json();
 }

@@ -12,22 +12,19 @@ export const Controller = {
     }
    
   },
- handleAdd(user) {
-  localStorage.setItem("userId", user.id);
-  window.location.href = "../expensesTracker/expensesTracker.html";
+handleAddExpenses(user) {
+  window.location.href = `../expensesTracker/expensesTracker.html?userId=${user.id}`;
 },
 
-handleView(user) {
-  localStorage.setItem("userId", user.id);
-  localStorage.setItem("userName", user.name); // optional, for heading
-  window.location.href = "../user_expenses/userExpenses.html";
+handleViewExpenses(user) {
+  window.location.href = `../user_expenses/userExpenses.html?userId=${user.id}&userName=${encodeURIComponent(user.name)}`;
 },
 
-  handleUpdate(user) {
+  handleUpdateUser(user) {
     window.location.href = `../add_user/addUser.html?id=${user.id}`;
   },
 
-  async handleDelete(user, listItem) {
+  async handleDeleteUser(user, listItem) {
     if (user.name) {
       try {
         await Model.deleteUser(user.id);

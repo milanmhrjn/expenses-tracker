@@ -4,37 +4,39 @@ import { deleteExpenseById } from "../expensesTracker/expensesTracker.model.js";
 export function setHeading(text) {
   $("#userExpensesHeading").text(text);
 }
+export function renderExpenses(expenses, userId) {
+  console.log("renderExpenses called, expenses:", expenses);
 
-
-// rendering filtered expenses into table
-export function renderExpenses(filteredExpenses, allExpenses) {
   const $tableBody = $("#expenseTableBody");
+  $tableBody.empty();
 
-  filteredExpenses.forEach((exp, idx) => {
-    const $tr = $(`
-        <tr>
-          <td>${idx + 1}</td>
-          <td>${exp.Category}</td>
-          <td>${exp.Description}</td>
-          <td>${exp.Amount}</td>
-          <td>${new Date(exp.Date).toLocaleString()}</td>
-          <td>
-            <div class="btn">
-              <button class="edit-btn"><i class="fa-regular fa-pen-to-square"></i></button>
-              <button class="delete-btn"><i class="fa-solid fa-trash"></i></button>
-            </div>
-          </td>
-        </tr>
-      `);
+  expenses.forEach((exp, idx) => {
+    const rawDate = exp.DateCreated;
+    const dateStr = rawDate ? new Date(rawDate).toLocaleDateString() : "N/A";
 
-    // Adding button functionality
-    addEditButtonFunctionality($tr, exp);
-    addDeleteButtonFunctionality($tr, exp, allExpenses);
-    $tableBody.append($tr);
+    const $row = $(`
+      <tr>
+        <td>${idx + 1}</td>
+        <td>${exp.Category || exp.category}</td>
+        <td>${exp.Description || exp.description}</td>
+        <td>${exp.Amount || exp.amount}</td>
+        <td>${dateStr}</td>
+        <td>
+          <div class="btn">
+            <button class="edit-btn"><i class="fa-regular fa-pen-to-square"></i></button>
+            <button class="delete-btn"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+    `);
+
+    addEditButtonFunctionality($row, exp, userId);
+    addDeleteButtonFunctionality($row, exp);
+    $tableBody.append($row);
   });
 }
 
-// clearing the expenses table
+
 export function clearTable() {
   $("#expenseTableBody").empty();
 }
@@ -56,10 +58,11 @@ export function addDeleteButtonFunctionality($row, exp) {
   });
 }
 
-export function addEditButtonFunctionality($row, exp) {
+
+export function addEditButtonFunctionality($row, exp, userId) {
   $row.find(".edit-btn").on("click", function () {
-    localStorage.setItem("editExpense", JSON.stringify(exp));
-    window.location.href = "../expensesTracker/expensesTracker.html";
+    window.location.href = `../expensesTracker/expensesTracker.html?userId=${userId}&editExpenseId=${exp.id || exp.Id}`;
   });
 }
+
 
