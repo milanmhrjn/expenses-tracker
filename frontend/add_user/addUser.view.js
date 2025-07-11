@@ -6,10 +6,12 @@ export function prefillForm(user) {
   $("#email").val(user.email);
   $("#gender").val(user.gender);
   $("#address").val(user.address);
+  $("#password").val(user.password);
 }
 
 
 export function validateInputs(phone, age) {
+  
    if(phone<0){
     alert("Phone number must be positive number")
   }

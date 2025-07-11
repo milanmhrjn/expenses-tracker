@@ -13,12 +13,13 @@ export const Controller = {
    
   },
 handleAddExpenses(user) {
-  window.location.href = `../expensesTracker/expensesTracker.html?userId=${user.id}`;
+  window.location.href = `../expensesTracker/expensesTracker.html?userId=${user.id}&userName=${encodeURIComponent(user.name)}`;
 },
 
 handleViewExpenses(user) {
   window.location.href = `../user_expenses/userExpenses.html?userId=${user.id}&userName=${encodeURIComponent(user.name)}`;
 },
+
 
   handleUpdateUser(user) {
     window.location.href = `../add_user/addUser.html?id=${user.id}`;

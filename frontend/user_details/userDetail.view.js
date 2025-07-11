@@ -14,7 +14,7 @@ export const View = {
       const $li = $("<li></li>");              
       const $name = $("<span></span>").text(user.name);  
       const $buttons = $("<div></div>").addClass("buttons"); 
-      const $addBtn = this.createButton("add-btn", "fa-solid fa-plus",   () => { localStorage.removeItem("editExpense"); localStorage.setItem("userId", user.id); controller.handleAddExpenses(user); });
+      const $addBtn = this.createButton("add-btn", "fa-solid fa-plus",() => { localStorage.removeItem("editExpense"); localStorage.setItem("userId", user.id); controller.handleAddExpenses(user); });
       const $viewBtn = this.createButton("view-btn", "fa-regular fa-eye", () => controller.handleViewExpenses(user));
       const $updateBtn = this.createButton("update-btn", "fa-regular fa-pen-to-square", () => controller.handleUpdateUser(user));
       const $deleteBtn = this.createButton("delete-btn", "fa-solid fa-trash", () => controller.handleDeleteUser(user, $li));

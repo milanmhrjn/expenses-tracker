@@ -1,36 +1,43 @@
 import { clearTable, renderExpenses, setHeading } from "./userExpenses.view.js";
 import { getAllExpensesByUserId, getUserById } from "../expensesTracker/expensesTracker.model.js";
 
-$(document).ready(async function () {
+export async function userExpenses() {
   const params = new URLSearchParams(window.location.search);
   const userId = parseInt(params.get("userId"));
-  const userName = params.get("userName");
-
+  const userName = params.get("userName")
   if (!userId) {
-    alert("No user selected.");
+    alert("No user selected");
     return;
   }
-
+  
   try {
-    console.log("Fetching expenses for userId:", userId);
-    const expenses = await getAllExpensesByUserId(userId);
-    console.log("Expenses fetched:", expenses);
+    const [user, expenses] = await Promise.all([
+      getUserById(userId),
+      getAllExpensesByUserId(userId),
+    ]);
 
-    setHeading(`${userName}'s Expenses`);
+    setHeading(`${userName || user.name}'s Expenses`);
+    
 
     const defaultDays = parseInt($("#statementSelect").val());
+
+    $("#statementSelect").off("change");
     filterByDays(defaultDays, expenses, userId);
 
     $("#statementSelect").on("change", function () {
       const days = parseInt($(this).val());
       filterByDays(days, expenses, userId);
     });
-  } catch (err) {
-    console.error("Failed to load expenses:", err);
-    alert("Could not load expenses.");
-  }
-});
 
+   $("#addExpenseBtn").off("click").on("click", () => {
+      window.location.href = `../expensesTracker/expensesTracker.html?userId=${userId}`;
+    });
+
+  } catch (err) {
+    console.error("Error loading user expenses:", err);
+    alert("Failed to load expenses");
+  }
+}
 
 function filterByDays(days, expenses, userId) {
   clearTable();
@@ -53,31 +60,3 @@ function filterByDays(days, expenses, userId) {
 }
 
 
-export async function userExpenses() {
-  const userId = parseInt(localStorage.getItem("userId"));
-  if (!userId) {
-    alert("No user selected");
-    return;
-  }
-
-  try {
-    const [user, expenses] = await Promise.all([
-      getUserById(userId),
-      getAllExpensesByUserId(userId)
-    ]);
-
-    setHeading(`${user.name}'s Expenses`);
-
-    const defaultDays = parseInt($("#statementSelect").val());
-    filterByDays(defaultDays, expenses, userId);
-
-    $("#statementSelect").on("change", function () {
-      const days = parseInt($(this).val());
-      filterByDays(days, expenses, userId);
-    });
-
-  } catch (err) {
-    console.error("Error loading user expenses:", err);
-    alert("Failed to load expenses");
-  }
-}

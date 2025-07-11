@@ -27,13 +27,10 @@ export const Controller = {
     }
     try {
       await Model.saveUser(this.editUser, formData);
-      window.location.href = "../user_details/userDetail.html"
+      window.location.href = "../user_details/userDetail.html";
     } catch (err) {
       console.error("Failed to save user:", err);
       alert("Error saving user.");
     }
   },
-
-
-
 };

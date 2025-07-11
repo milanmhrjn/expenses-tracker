@@ -11,9 +11,8 @@ export function renderExpenses(expenses, userId) {
   $tableBody.empty();
 
   expenses.forEach((exp, idx) => {
-    const rawDate = exp.DateCreated;
+    const rawDate = exp.ExpenseDate;
     const dateStr = rawDate ? new Date(rawDate).toLocaleDateString() : "N/A";
-
     const $row = $(`
       <tr>
         <td>${idx + 1}</td>

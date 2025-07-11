@@ -64,3 +64,13 @@ th, td {
   gap: 15px;
   height: 100%;
 }
+
+#addExpenseBtn{
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;  
+  margin-left: 1120px;
+}

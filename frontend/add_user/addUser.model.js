@@ -5,7 +5,8 @@ export function getFormData() {
     age: parseInt($("#age").val().trim()),
     email: $("#email").val().trim(),
     gender: $("#gender").val(),
-    address: $("#address").val().trim()
+    address: $("#address").val().trim(),
+    password: $("#password").val().trim()
   };
 }
 
